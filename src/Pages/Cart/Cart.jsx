@@ -34,7 +34,7 @@ function Cart() {
     // calculating the total price of the items in the basket
     // using reduce method to iterate over the basket and calculate the total price
     const total = basket.reduce((amount,item)=>{
-        return  (item.amount + amount) * (item.price)
+        return  amount + (item.amount * item.price)
     },0)
 
 

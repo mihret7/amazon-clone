@@ -22,6 +22,9 @@ import ProductDetail from "./Pages/ProductDetail/ProductDetail";
 import {Elements} from '@stripe/react-stripe-js'
 import {loadStripe} from '@stripe/stripe-js';
 
+// protected route
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+
 
 
 function Routing() {
@@ -33,12 +36,25 @@ function Routing() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/auth" element={<Auth />} />
+        
         <Route path="/payments" element={
-          <Elements stripe={stripePromise}>
-            <PaymentNew />
-          </Elements>
+          <ProtectedRoute 
+            message="You need to login to make a payment" 
+            redirect="/payments">
+                <Elements stripe={stripePromise}>
+                    <PaymentNew />
+                </Elements>
+            </ProtectedRoute>
+          
         } />
-        <Route path="/orders" element={<Orders />} />
+        <Route path="/orders" element={
+          <ProtectedRoute 
+            message="You need to login to view your orders" 
+            redirect="/orders">
+                <Orders />
+          </ProtectedRoute>
+              
+          } />
         <Route path="/category/:categoryName" element={<Results />} />
         <Route path="/products/:productId" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />

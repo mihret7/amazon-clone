@@ -6,7 +6,9 @@ import styles from './Auth.module.css'
 
 
 // importing Link from react-router-dom
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useNavigate, useLocation} from 'react-router-dom'
+
+
 
 
 //importing auth from firebase.js (from our config)
@@ -39,6 +41,10 @@ function Auth() {
   // using the context
   const [{user}, dispatch] = useContext(DataContext);
 
+  // using useLocation to get the state from the previous page
+  const navStateData = useLocation();
+  const {message, redirect} = navStateData?.state || {};
+
 
   // using useNavigate to redirect the user to the home page after signing in or signing up
   const navigate = useNavigate();
@@ -56,7 +62,7 @@ function Auth() {
             user: userCredential.user
           });
           setLoading({...loading, signIn: false});
-          navigate('/');
+          navigate(redirect || '/');
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -76,7 +82,7 @@ function Auth() {
             user: userCredential.user
           });
         setLoading({...loading, signUp: false});
-        navigate('/');
+        navigate(redirect || '/');
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -106,7 +112,12 @@ function Auth() {
        {/* form */}
        <div className={styles.login__container}>
 
+        
+
+
         <h1>Sign In</h1>
+        {message && <small className={styles.message}>{message}</small>}
+        
 
         <form action="">
           <div>
