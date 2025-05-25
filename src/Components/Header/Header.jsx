@@ -17,6 +17,8 @@ import { BiCart } from "react-icons/bi";
 import LowerHeader from "./LowerHeader";
 import { DataContext } from "../DataProvider/DataProvider";
 
+// importing auth from firebase.js (our firebase configuration)
+import { auth } from "../../Utility/firebase";
 
 
 const Header = () => {
@@ -97,11 +99,22 @@ const Header = () => {
 
 
             {/* auth */}
-            <Link to="/auth">
+            <Link to={!user && "/auth"}>
               <div>
-                    <p>Hello, Sign In</p>
-                    <span>Account & Lists</span>
+                {user ? (
+                <>
+                  <p>Hello, {user?.email?.split('@')[0]}</p>
+                  <span onClick={()=>auth.signOut()}>Sign Out</span>
+                </>
+                ) : (
+                <>
+                <p>Hello, Sign In</p>
+                <span>Account & Lists</span>
+                </>
+                  
+                )}
               </div>
+              
             </Link>
 
 

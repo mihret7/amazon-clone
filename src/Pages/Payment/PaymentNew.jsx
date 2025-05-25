@@ -27,6 +27,8 @@ import { ClipLoader } from "react-spinners";
 // importing firebase
 import { db } from "../../Utility/firebase";
 
+// Import the specific Firestore functions needed in this component
+import { collection, doc, setDoc } from 'firebase/firestore';
 
 
 // importing react-router-dom
@@ -34,7 +36,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-console.log("hello")
+console.log("check")
 
 
 function Payment() {
@@ -65,6 +67,7 @@ function Payment() {
     e.preventDefault();
 
     try {
+        console.log("inside try")
       setProcessing(true);
       const response = await axiosInstance({
         method: "POST",
@@ -79,16 +82,31 @@ function Payment() {
         },
       });
 
-      await db
-        .collection("users")
-        .doc(user.uid)
-        .collection("orders")
-        .doc(paymentIntent.id)
-        .set({
-          basket: basket,
-          amount: paymentIntent.amount,
-          created: paymentIntent.created,
-        });
+      
+  // Get a reference to the specific order document path using the modular functions
+  // doc(database, collectionPath, documentId)
+  // or doc(documentReference, collectionPath, documentId) for subcollections
+
+  const orderDocRef = doc(
+    collection(doc(db, "users", user.uid), "orders"), // This builds the reference path
+    paymentIntent.id                                 // This is the final doc ID
+  );
+
+  // Alternatively, build it step by step which can be clearer:
+  // const userDocRef = doc(db, "users", user.uid);
+  // const ordersCollectionRef = collection(userDocRef, "orders");
+  // const orderDocRef = doc(ordersCollectionRef, paymentIntent.id);
+
+
+  // Use the modular setDoc function to write the data
+  await setDoc(orderDocRef, {
+    basket: basket,
+    amount: paymentIntent.amount,
+    created: paymentIntent.created,
+  });
+
+  console.log("Order document successfully written at:", `users/${user.uid}/orders/${paymentIntent.id}`);
+
 
         
       dispatch({ type: Type.EMPTY_BASKET });

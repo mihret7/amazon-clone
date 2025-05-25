@@ -5,10 +5,9 @@ import React from 'react'
 import styles from './category.module.css'
 
 // importing Link from react-router-dom
-
-
-
 import {Link} from 'react-router-dom'
+
+
 function CategoryCard({data}) {
 
   return (
@@ -21,7 +20,7 @@ function CategoryCard({data}) {
             <img src={data?.imgLink} alt="" />
             <p>shop now</p>
         </Link>
-        
+
     </div>
   )
 }

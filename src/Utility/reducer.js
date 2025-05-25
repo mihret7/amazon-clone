@@ -8,6 +8,7 @@ import { Type } from "./action.type";
 // initial state for the reducer and exporting it
 export const initialState = {
   basket: [],
+  user: null
 };
 
 
@@ -57,6 +58,19 @@ export const reducer = (state, action) => {
         ...state,
         basket: newBasket,
       };
+
+    
+    
+
+    // set user
+    case Type.SET_USER:
+      return {
+        ...state,
+        user: action.user,
+      };
+
+
+
 
 
     // default case
