@@ -13,6 +13,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@chapa_et/inline.js": "^1.0.1",
     "chapa": "^1.0.5",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

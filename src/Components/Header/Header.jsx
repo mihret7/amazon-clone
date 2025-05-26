@@ -20,17 +20,26 @@ import { DataContext } from "../DataProvider/DataProvider";
 // importing auth from firebase.js (our firebase configuration)
 import { auth } from "../../Utility/firebase";
 
+import { Type } from "../../Utility/action.type";
+
 
 const Header = () => {
 
     // using useContext to get the user and basket data 
-  const [{ user, basket }, dispatch] = useContext(DataContext);
+  const [{ user, basket, popup }, dispatch] = useContext(DataContext);
 
     // calculating the total number of items in the basket
   const totalItem = basket?.reduce((amount, item) => {
     return (amount) + (item.amount);
   }, 0);
 
+  const handleLogout = async () => {
+    await auth.signOut();
+    dispatch({
+      type: Type.SET_POPUP,
+      message: "Successfully logged out!",
+    });
+  };
 
 
   return (
@@ -104,7 +113,9 @@ const Header = () => {
                 {user ? (
                 <>
                   <p>Hello, {user?.email?.split('@')[0]}</p>
-                  <span onClick={()=>auth.signOut()}>Sign Out</span>
+                  <span onClick={()=>handleLogout()}>
+                      Sign Out
+                  </span>
                 </>
                 ) : (
                 <>

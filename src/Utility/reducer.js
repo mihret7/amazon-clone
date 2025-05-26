@@ -8,7 +8,8 @@ import { Type } from "./action.type";
 // initial state for the reducer and exporting it
 export const initialState = {
   basket: [],
-  user: null
+  user: null,
+   popup: null,
 };
 
 
@@ -69,14 +70,31 @@ export const reducer = (state, action) => {
         user: action.user,
       };
     
-      
+      // set basket
+      case Type.SET_BASKET:
+          return {
+            ...state,
+            basket: action.basket,
+          };
+
+    // empty basket
     case Type.EMPTY_BASKET:
       return {
         ...state,
         basket: [],
       };
 
+    case Type.SET_POPUP:
+  return {
+    ...state,
+    popup: action.message,
+  };
 
+case Type.CLEAR_POPUP:
+  return {
+    ...state,
+    popup: null,
+  };
 
 
     // default case

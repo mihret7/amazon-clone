@@ -36,11 +36,10 @@ import { useNavigate } from "react-router-dom";
 
 
 
-console.log("check")
 
 
 function Payment() {
-  const [{ user, basket }, dispatch] = useContext(DataContext);
+  const [{ user, basket, popup }, dispatch] = useContext(DataContext);
 
   const totalItem = basket?.reduce((amount, item) => {
     return (amount) + (item.amount);
@@ -67,7 +66,6 @@ function Payment() {
     e.preventDefault();
 
     try {
-        console.log("inside try")
       setProcessing(true);
       const response = await axiosInstance({
         method: "POST",
@@ -105,13 +103,16 @@ function Payment() {
     created: paymentIntent.created,
   });
 
-  console.log("Order document successfully written at:", `users/${user.uid}/orders/${paymentIntent.id}`);
 
 
         
       dispatch({ type: Type.EMPTY_BASKET });
 
       setProcessing(false);
+      dispatch({
+            type: Type.SET_POPUP,
+            message: "Payment successfully completed!",
+          });
       navigate("/orders", { state: { msg: "you have placed new Order" } });
     } catch (error) {
       console.log(error);
