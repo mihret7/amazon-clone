@@ -42,6 +42,9 @@ const Header = () => {
   };
 
 
+
+
+
   return (
     <section className={styles.fixed}>
       <section>
@@ -112,7 +115,7 @@ const Header = () => {
               <div>
                 {user ? (
                 <>
-                  <p>Hello, {user?.email?.split('@')[0]}</p>
+                  <p>Hello, {user?.displayName?.split('@')[0]}</p>
                   <span onClick={()=>handleLogout()}>
                       Sign Out
                   </span>

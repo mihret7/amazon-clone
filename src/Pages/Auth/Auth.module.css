@@ -79,8 +79,17 @@
   .login__registerButton:hover {
     background-color: lightgray;
   }
-
-
+   
+  .login__agreement{
+    font-size: 10px;
+    margin-top: 10px;
+    /* text-align: left; */
+    
+  }
+  .login__agreement a {
+    /* color: #007185; */
+    text-decoration: none;
+  }
   .error {
     color: red;
     background-color: rgb(255, 235, 238);

@@ -15,7 +15,7 @@ import { DataContext } from "../../Components/DataProvider/DataProvider";
 // importing types
 import { Type } from "../../Utility/action.type";
 
-// importing stripe components
+// importing stripe hooks
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
 // importing axios instance
@@ -39,37 +39,51 @@ import { useNavigate } from "react-router-dom";
 
 
 function Payment() {
+  // using useContext to get user, basket and popup data
   const [{ user, basket, popup }, dispatch] = useContext(DataContext);
-
+  
+  // calculating the total number of items in the basket
   const totalItem = basket?.reduce((amount, item) => {
     return (amount) + (item.amount);
   }, 0);
 
-  const total = basket.reduce((amount, item) => {
-    return (item.amount + amount) * (item.price );
+  // calculating the total price of the items in the basket
+  const totalPriceInDollar = basket.reduce((amount, item) => {
+    return (amount) +  (item.amount * item.price );
   }, 0);
+
+  const totalPriceInCents = totalPriceInDollar * 100; // converting to cents for Stripe
+  const totalPriceInt = Math.round(totalPriceInCents); // rounding to the nearest integer
   
-  const totalInt = parseInt(total);
-  console.log(totalInt);
+  
+
+  // state to manage card error and processing state
   const [cardError, setCardError] = useState(null);
   const [processing, setProcessing] = useState(false);
 
+
+  // using stripe and elements hooks to access stripe and elements objects
   const stripe = useStripe();
   const elements = useElements();
+
+  // using useNavigate to redirect the user after payment
   const navigate = useNavigate();
 
+  // handleChange function to set card error message
   const handleChange = (e) => {
     e?.error?.message ? setCardError(e?.error?.message) : setCardError("");
   };
 
+  // handlePayment function to process the payment
   const handlePayment = async (e) => {
     e.preventDefault();
 
     try {
       setProcessing(true);
+      // request to create a payment intent
       const response = await axiosInstance({
         method: "POST",
-        url: `/payment/create?total=${totalInt * 100}`,
+        url: `/payment/create?total=${totalPriceInt}`,
       });
 
       const clientSecret = response.data?.clientSecret;
@@ -80,52 +94,46 @@ function Payment() {
         },
       });
 
-      
-  // Get a reference to the specific order document path using the modular functions
-  // doc(database, collectionPath, documentId)
-  // or doc(documentReference, collectionPath, documentId) for subcollections
+   
 
-  const orderDocRef = doc(
-    collection(doc(db, "users", user.uid), "orders"), // This builds the reference path
-    paymentIntent.id                                 // This is the final doc ID
-  );
+      const orderDocRef = doc(
+        collection(doc(db, "users", user.uid), "orders"), 
+        paymentIntent.id                                 
+      );
 
-  // Alternatively, build it step by step which can be clearer:
-  // const userDocRef = doc(db, "users", user.uid);
-  // const ordersCollectionRef = collection(userDocRef, "orders");
-  // const orderDocRef = doc(ordersCollectionRef, paymentIntent.id);
-
-
-  // Use the modular setDoc function to write the data
-  await setDoc(orderDocRef, {
-    basket: basket,
-    amount: paymentIntent.amount,
-    created: paymentIntent.created,
-  });
+     // Create a new document reference in the user's orders collection
+      await setDoc(orderDocRef, {
+        basket: basket,
+        amount: paymentIntent.amount,
+        created: paymentIntent.created,
+      });
 
 
-
-        
       dispatch({ type: Type.EMPTY_BASKET });
 
       setProcessing(false);
+
       dispatch({
             type: Type.SET_POPUP,
             message: "Payment successfully completed!",
           });
+
       navigate("/orders", { state: { msg: "you have placed new Order" } });
+
     } catch (error) {
-      console.log(error);
       setProcessing(false);
     }
   };
 
+
+
+
+
   return (
     <LayOut>
       {/* header */}
-      <div className={styles.payment__header}>
-        Checkout ({totalItem}) items
-      </div>
+      <div className={styles.payment__header}>Checkout ({totalItem}) items</div>
+
       {/* payment method */}
       <section className={styles.payment}>
         {/* address */}
@@ -137,17 +145,19 @@ function Payment() {
             <div>Hawassa, Ethiopia</div>
           </div>
         </div>
+
         <hr />
 
         {/* product */}
         <div className={styles.flex}>
           <h3>Review items and delivery</h3>
           <div>
-            {basket?.map((item) => (
-              <ProductCard product={item} flex={true} />
+            {basket?.map((item, i) => (
+              <ProductCard product={item} flex={true} key={i} />
             ))}
           </div>
         </div>
+
         <hr />
 
         {/* card form */}
@@ -160,6 +170,7 @@ function Payment() {
                 {cardError && (
                   <small style={{ color: "red" }}>{cardError}</small>
                 )}
+
                 {/* card element */}
                 <CardElement onChange={handleChange} />
 
@@ -167,9 +178,11 @@ function Payment() {
                 <div className={styles.payment__price}>
                   <div>
                     <span style={{ display: "flex", gap: "10px" }}>
-                      <p>Total Order |</p> <CurrencyFormat amount={total} />
+                      <p>Total Order |</p>{" "}
+                      <CurrencyFormat amount={totalPriceInDollar} />
                     </span>
                   </div>
+
                   <button type="submit">
                     {processing ? (
                       <div className={styles.loading}>

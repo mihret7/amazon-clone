@@ -12,8 +12,6 @@ const chapaKey = process.env.CHAPA_KEY;
 // using stripe payment
 const stripe = require("stripe")(stripeKey);
 
-// using chapa payment
-// const Chapa = require("chapa");
 
 const app = express();
 app.use(cors({ origin: true }));
@@ -34,6 +32,7 @@ app.post("/payment/create", async (req, res)=>{
       amount: total,
       currency: "usd",
     });
+    console.log("Payment Intent Created:", paymentIntent);
     res.status(201).json({
       clientSecret: paymentIntent.client_secret,
       message: "Payment intent created successfully",

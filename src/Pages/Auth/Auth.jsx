@@ -148,7 +148,8 @@ function Auth() {
         <button 
         type='submit' 
         name='signUp'
-        onClick={authHandler} className={styles.login__registerButton}>
+        onClick={authHandler} 
+        className={styles.login__registerButton}>
          {loading.signUp ? <ClipLoader color="#000" size={20} /> : "Create your Amazon account"}
          </button>
 
