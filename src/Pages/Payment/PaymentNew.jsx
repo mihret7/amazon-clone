@@ -100,7 +100,7 @@ function Payment() {
         collection(doc(db, "users", user.uid), "orders"), 
         paymentIntent.id                                 
       );
-
+      console.log(orderDocRef);
      // Create a new document reference in the user's orders collection
       await setDoc(orderDocRef, {
         basket: basket,

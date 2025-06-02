@@ -125,6 +125,8 @@ function Auth() {
 
   return (
     <section className={styles.login}>
+      
+      
       {/* Amazon logo */}
       <Link to={"/"}>
         <img
@@ -132,6 +134,7 @@ function Auth() {
           alt="amazon logo"
         />
       </Link>
+
 
       {/* Authentication form */}
       <div className={styles.login__container}>
@@ -144,7 +147,9 @@ function Auth() {
         <form action="">
           {isSignUp && (
             <>
-              <div>
+
+              {/* first name div */}
+              <div> 
                 <label htmlFor="firstName">First Name</label>
                 <input
                   value={firstName}
@@ -154,6 +159,8 @@ function Auth() {
                   required
                 />
               </div>
+
+              {/* last name div */}
               <div>
                 <label htmlFor="lastName">Last Name</label>
                 <input
@@ -166,6 +173,7 @@ function Auth() {
             </>
           )}
 
+          {/* email div */}
           <div>
             <label htmlFor="email">Email</label>
             <input
@@ -176,7 +184,8 @@ function Auth() {
               required
             />
           </div>
-
+         
+         {/* password div */}
           <div>
             <label htmlFor="password">Password</label>
             <input
@@ -187,7 +196,9 @@ function Auth() {
               required
             />
           </div>
+          
 
+          {/* confirm password div */}
           {isSignUp && (
             <div>
               <label htmlFor="confirmPassword">Confirm Password</label>

@@ -7,14 +7,15 @@ const cors = require("cors");
 
 
 const stripeKey = process.env.STRIPE_KEY;
-const chapaKey = process.env.CHAPA_KEY;
 
 // using stripe payment
 const stripe = require("stripe")(stripeKey);
 
 
 const app = express();
+
 app.use(cors({ origin: true }));
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
