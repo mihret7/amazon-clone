@@ -19,7 +19,7 @@ A modern Amazon-inspired e-commerce web application built with **React (Vite)**,
 
 ## Demo
 
-> amazon-clone-by-mihret.netlify.app
+> _amazon-clone-by-mihret.netlify.app_
 
 ---
 
