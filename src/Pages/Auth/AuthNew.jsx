@@ -102,7 +102,6 @@ function Auth() {
             displayName: firstName.trim(), 
           }).then(() => {
             dispatch({ type: "SET_USER", user: auth.currentUser });
-            console.log("User created:", auth.currentUser);
             setLoading((prev) => ({ ...prev, signUp: false }));
             navigate(redirect || "/");
             dispatch({

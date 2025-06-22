@@ -10,7 +10,7 @@ import {
 
 // import pages
 import Landing from "./Pages/Landing/Landing";
-import Auth from "./Pages/Auth/Auth";
+// import Auth from "./Pages/Auth/Auth";
 import AuthNew from "./Pages/Auth/AuthNew";
 // import Payment from "./Pages/Payment/Payment";
 import PaymentNew from "./Pages/Payment/PaymentNew";
