@@ -1,6 +1,6 @@
 # Amazon Clone
 
-A modern Amazon-inspired e-commerce web application built with **React (Vite)**, **Firebase** (database & authentication), and **Stripe** for payment integration.
+A modern Amazon-inspired cloned e-commerce web application built with **React (Vite)**, **Firebase** (database & authentication), and **Stripe** for payment integration.
 
 [View on GitHub](https://github.com/mihret7/amazon-clone)
 
